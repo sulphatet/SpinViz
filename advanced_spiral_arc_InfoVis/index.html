@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css"
+    />
+    <link rel="stylesheet" href="css/dataTables.bootstrap5.min.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <style>
+      #connection_tooltip{        
+      text-align: right;
+      }
+
+      #ranking_tooltip{        
+      text-align: right;
+      }
+
+      #color_tooltip{        
+      text-align: right;
+      }
+
+      #legend2{
+    overflow:hidden;
+}
+
+
+.child {
+  display: inline-block;
+  
+  padding: 1rem 1rem;
+  
+}
+
+.legend2 {
+    float:left;
+    margin-right: 1em;
+}
+
+.country-name {
+    margin: 0 !important;
+}
+.key-dot {
+    display: inline-block;
+    height: 10px;
+    margin-right: .5em;
+    width: 10px;
+}
+
+.queens { background: #d7191c;}
+.kings { background: #fdae61;}
+.bronx { background: #74add1;}
+.outlier {background: #000000}
+.intra {background: #253494}
+.inter {background: #c2c5c5}
+
+        div.tooltip {
+      position: absolute;
+      text-align: center;
+      width: 250px;
+      height: 28px;
+      padding: 2px;
+      font: 14px sans-serif;
+
+      border: 0px;
+      border-radius: 8px;
+      pointer-events: none;
+    }
+
+      .bar {
+        fill: steelblue;
+        
+      }
+
+      .bar:hover {
+        fill: brown;
+      }
+
+      .barLight {
+    	  fill: #2E2E31;
+      }
+
+      .barBase {
+  	    fill: steelblue;
+      }
+
+    
+      .strokechange {
+        stroke-width : .1;
+
+      }
+
+      .highlighttable {
+        background-color: "orange";
+      }
+
+      .unhighlighttable {
+        background-color: "transparent";
+      }
+
+      .strokenormal {
+        stroke-width : .02;
+
+      }
+
+      .title {
+        font: bold 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
+      }
+
+      .axis {
+        font: 10px sans-serif;
+      }
+
+      .axis path,
+      .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+      }
+
+      .x.axis path {
+        display: none;
+      }
+
+      #table-location {
+      	margin-left: 0;
+        margin-right: auto;
+        width: 100%;
+      
+      }
+    </style>
+    <title>Frontendfunn - Bootstrap 5 Admin Dashboard Template</title>
+  </head>
+  <body>
+    <!-- top navigation bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container-fluid">
+          <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#sidebar"
+          aria-controls="offcanvasExample"
+        >
+          <span class="navbar-toggler-icon" data-bs-target="#sidebar"></span>
+        </button>
+          <a class="navbar-brand" href="#">Spiral Visualization For Graph Data</a>
+        </div>
+      </nav>
+    <!-- top navigation bar -->
+    <!-- offcanvas -->
+    <div
+      class="offcanvas offcanvas-start sidebar-nav bg-dark offcanvas-show"
+      tabindex="-1"
+      id="sidebar"
+    >
+      <div class="offcanvas-body p-0">
+        <nav class="navbar-dark">
+          <ul class="navbar-nav">
+
+            <li class="my-4"><hr class="dropdown-divider bg-light" /></li>
+            <li>
+              <div class="text-muted small fw-bold text-uppercase px-3 mb-3">
+                Settings
+              </div>
+            </li>
+
+<!--
+            <li>
+              <a
+                class="nav-link px-3 sidebar-link"
+                data-bs-toggle="collapse"
+                href="#layouts"
+              >
+                <span>Spiral parameters</span>
+                <span class="ms-auto">
+                  <span class="right-icon">
+                    <i class="bi bi-chevron-down"></i>
+                  </span>
+                </span>
+              </a>
+              <div class="collapse" id="layouts">
+                <ul class="navbar-nav ps-3">
+
+                  <li>
+                    <label for="customRange2" class="form-label text-white">Node radius = <input type="text" id="textInputradius" value="1.5" class = "text-white bg-dark text-center" size="5"></label>
+                    <input type="range" class="form-range text-white" min="1" max="10" id="Radius" onchange="updateTextInputRadius(this.value)" value="1.5">
+                  </li>
+
+                  <li>
+                    <label for="customRange2" class="form-label text-white">max_spiral_radius = <input type="text" id="textInputradius" value="1.5" class = "text-white bg-dark text-center" size="5"></label>
+                    <input type="range" class="form-range text-white" min="1" max="10" id="Radius" onchange="updateTextInputRadius(this.value)" value="1.5">
+                  </li>
+
+                  <li>
+                    <label for="customRange2" class="form-label text-white">max_spiral_colis = <input type="text" id="textInputradius" value="1.5" class = "text-white bg-dark text-center" size="5"></label>
+                    <input type="range" class="form-range text-white" min="1" max="10" id="Radius" onchange="updateTextInputRadius(this.value)" value="1.5">
+                  </li>
+
+                  <li>
+                    <label for="customRange2" class="form-label text-white">max_spiral_nodes = <input type="text" id="textInputradius" value="1.5" class = "text-white bg-dark text-center" size="5"></label>
+                    <input type="range" class="form-range text-white" min="1" max="10" id="Radius" onchange="updateTextInputRadius(this.value)" value="1.5">
+                  </li>
+
+                </ul>
+              </div>
+
+            </li>
+            -->
+
+
+            <li>
+              <a
+                class="nav-link px-3 sidebar-link"
+                data-bs-toggle="collapse"
+                href="#layouts"
+              >
+                <span>Find Node</span>
+                <span class="ms-auto">
+                  <span class="right-icon">
+                    <i class="bi bi-chevron-down"></i>
+                  </span>
+                </span>
+              </a>
+              <div class="collapse" id="layouts">
+                <ul class="navbar-nav ps-3">
+
+                  <li>
+                    <label for="customRange2" class="form-label text-white">Node Id = <input type="text" id="textInputNodeId" class = "text-white bg-dark text-center" size="5"></label>
+                    <button onclick="find_node_by_label()">ok</button>
+
+                  </li>
+                </ul>
+              </div>
+
+            </li>
+
+
+            <li>
+              <a
+                class="nav-link px-3 sidebar-link"
+                data-bs-toggle="collapse"
+                href="#layouts"
+              >
+                <span>Most Connected Nodes</span>
+                <span class="ms-auto">
+                  <span class="right-icon">
+                    <i class="bi bi-chevron-down"></i>
+                  </span>
+                </span>
+              </a>
+              <div class="collapse" id="layouts">
+                <ul class="navbar-nav ps-3">
+
+                  <li>
+                    <label for="customRange2" class="form-label text-white">Degree >= <input type="text" id="textInputConnecteddeg" value="0" class = "text-white bg-dark text-center" size="5"></label>
+                    <input type="range" class="form-range text-white" min="0" max="500" id="MostConnected" onchange="MostConnectedNodes(this.value)" value="0">
+
+                  </li>
+                </ul>
+              </div>
+
+            </li>
+
+
+
+            <li>
+              <a
+                class="nav-link px-3 sidebar-link"
+                data-bs-toggle="collapse"
+                href="#layouts"
+              >
+                <span>Filtering Nodes</span>
+                <span class="ms-auto">
+                  <span class="right-icon">
+                    <i class="bi bi-chevron-down"></i>
+                  </span>
+                </span>
+              </a>
+              <div class="collapse" id="layouts">
+                <ul class="navbar-nav ps-3">
+
+                  <li>
+                    <label for="customRange2" class="form-label text-white">Degree >= <input type="text" id="textInputdeg" value="0" class = "text-white bg-dark text-center" size="5"></label>
+                    <input type="range" class="form-range text-white" min="0" max="500" id="Degree" onchange="updateTextInputdeg(this.value)" value="0">
+
+                  </li>
+                </ul>
+              </div>
+
+              <div class="collapse" id="layouts">
+                <ul class="navbar-nav ps-3">
+
+                  <li>
+                    <label for="customRange2" class="form-label text-white">Community Size >= <input type="text" id="textInputsize" value="0" class = "text-white bg-dark text-center" size="5"></label>
+                    <input type="range" class="form-range text-white" min="0" max="8000" id="community_size" onchange="updateTextInputcomm_size(this.value)" value="0">
+
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li>
+              <a
+                class="nav-link px-3 sidebar-link"
+                data-bs-toggle="collapse"
+                href="#layouts"
+              >
+                <span>Color-Coding</span>
+                <span class="ms-auto">
+                  <span class="right-icon">
+                    <i class="bi bi-chevron-down"></i>
+                  </span>
+                </span>
+              </a>
+              <div class="collapse" id="layouts">
+                <ul class="navbar-nav ps-3">
+                  <li>
+                    <button class="btn btn-sm btn-outline-secondary" onclick= "colorNodesByDensity()"type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                      Density
+                    </button>
+                  </li>
+                </ul>
+              </div>
+              <div class="collapse" id="layouts">
+                <ul class="navbar-nav ps-3">
+                  <li>
+                    <button class="btn btn-sm btn-outline-secondary" onclick= "colorNodesByDegree()"type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                      Degree
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </li>
+
+            <li class="my-4"><hr class="dropdown-divider bg-light" /></li>
+            <li>
+              <div class="text-muted small fw-bold text-uppercase px-3 mb-3">
+                Addons
+              </div>
+            </li>
+            <li>
+  
+                  <li>
+                    <button class="btn btn-sm btn-outline-secondary" onclick= "edge_visualization()"type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                      hide/show-edges
+                    </button>
+                  </li>
+
+            </li>
+            <li>
+              <button class="btn btn-sm btn-outline-secondary" onclick= "reset_button()"type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                Reset
+              </button>
+            </li>
+            <li>
+              <a href="#" class="nav-link px-3">
+                <span class="me-2"><i class="bi bi-graph-up"></i></span>
+                <span>Charts</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="nav-link px-3">
+                <span class="me-2"><i class="bi bi-table"></i></span>
+                <span>Tables</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+    <!-- offcanvas -->
+    <main class="mt-5 pt-3">
+      <div class="container-fluid">
+
+
+
+
+        <div class="row">
+          <!--spiral chart-->
+          <div class="col-md-8 mb-3" >
+            <div class="card h-100" >
+              <div class="card-header">
+                <span class="me-2"><i class="bi bi-bar-chart-fill"></i></span>
+                Scalable Spiral Visualization
+              </div>
+              <div class="card-body">
+                <!--<canvas class="chart" width="400" height="200"> </canvas>-->
+                <div id="legend2">
+                  <div class="legend2" style="font-size:14px"> <p class="country-name"><span class="key-dot queens"></span><b>High</b></p> </div>
+                  <div class="legend2" style="font-size:14px"> <p class="country-name"><span class="key-dot kings"></span><b>Medium</b></p> </div>
+                  <div class="legend2" style="font-size:14px"> <p class="country-name"><span class="key-dot bronx"></span><b>Low</b></p> </div>
+                  <div class="legend2" style="font-size:14px"> <p class="country-name"><span class="key-dot outlier"></span><b>Outliers</b></p> </div>
+                  <div class="legend2" style="font-size:14px"> <p class="country-name"><span class="key-dot intra"></span><b>Intra-community edges</b></p> </div>
+                  <div class="legend2" style="font-size:14px"> <p class="country-name"><span class="key-dot inter"></span><b>Inter-community edges</b></p> </div>
+               </div>
+               <div class="parent">
+                  <div class="child" id="connection_tooltip" style="font-size:14px"><b>Nodes:</b> 1329 &emsp; <b>Edges:</b> 3320 </div>
+                  <div class="child" id="ranking_tooltip" style="font-size:14px"><b>Ranking:</b> Degree </div>
+                  <div class="child" id="color_tooltip" style="font-size:14px"><b>Color-Coding:</b> Density </div>
+                </div>
+                  <svg  id="chart" width="100%" height="70vh" style="resize:both"></svg>
+                  <div  id="legend1"  style="display: inline-block"></div>
+  
+
+              </div>
+            </div>
+          </div>
+          <!--spiral chart ends-->
+                    <!--selected  spiral chart-->
+                    <div class="col-md-4 mb-3">
+                      <div class="card h-100">
+                        <div class="card-header">
+                          <span class="me-2"><i class="bi bi-bar-chart-fill"></i></span>
+                          Selected community chart
+                        </div>
+                        <div class="card-body">
+                          <div id = "community_spiral"></div>
+                          <div id = "community_textbox"></div>
+                          <div id = "node_textbox"></div>
+                          <div id = "community_histogram"></div>
+                        </div>
+                      </div>
+                    </div>
+
+
+        </div>
+                <!--community charts-->
+                <div class="row">
+                  <div class="col-md-7 mb-3" id ="barchart_count">
+                    <div class="card bg-white h-100">
+                      <svg id="barchart-no_of_nodes" width="100%" height="100%"></svg>
+                    </div>
+                  </div>
+               
+                
+                  
+                </div>
+
+      </div>
+    </main>
+    <script src="./js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.2/dist/chart.min.js"></script>
+    <script src="./js/jquery-3.5.1.js"></script>
+    <script src="./js/jquery.dataTables.min.js"></script>
+    <script src="./js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script type="text/javascript" src="fitting_data_to_spiral13.js"></script>
+    <script type="text/javascript" src="barchart.js"></script>
+    
+    <script type="text/javascript" src="BarChartPopulator.js"></script>
+    <script type="text/javascript" src="settings.js"></script>
+
+    <!--<script type="text/javascript" src="barchart_density.js"></script>
+    <script src="./js/script.js"></script>-->
+  </body>
+</html>
